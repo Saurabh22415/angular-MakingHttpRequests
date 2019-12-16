@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {Post} from './post.model'
+import {map} from 'rxjs/operators'
 
 @Injectable({ providedIn : 'root'})
 export class PostService
@@ -18,6 +19,21 @@ export class PostService
       .subscribe(responseData => {
         console.log(responseData);
       });
+  }
+
+  public fetchPosts(){
+    return this.http.get('https://ng-complete-guide-80c93.firebaseio.com/posts.json').pipe(
+      map((responseData : {[key: string]: Post}) => {
+        const postArray :Post[] = [];
+          for(const key in responseData)
+          {
+            if(responseData.hasOwnProperty(key)){
+            postArray.push({...responseData[key], id : key});
+            }
+          }
+          return postArray;
+        })
+    )
   }
 
 }
