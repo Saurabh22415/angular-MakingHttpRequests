@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {Post} from './post.model'
-import {map} from 'rxjs/operators'
-import {Subject}  from 'rxjs'
+import {map, catchError} from 'rxjs/operators'
+import {Subject, throwError}  from 'rxjs'
 
 @Injectable({ providedIn : 'root'})
 export class PostService
@@ -37,6 +37,8 @@ export class PostService
             }
           }
           return postArray;
+        }), catchError(err =>{
+          return throwError(err);
         })
     )
   }
@@ -45,6 +47,6 @@ export class PostService
   {
     return this.http.delete('https://ng-complete-guide-80c93.firebaseio.com/posts.json');
   }
-  
+
 
 }
