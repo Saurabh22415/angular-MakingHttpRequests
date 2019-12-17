@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core'
-import {HttpClient, HttpHeaders} from '@angular/common/http'
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http'
 import {Post} from './post.model'
 import {map, catchError} from 'rxjs/operators'
 import {Subject, throwError}  from 'rxjs'
@@ -27,9 +27,14 @@ export class PostService
   }
 
   public fetchPosts(){
+    let httpParams : HttpParams= new HttpParams();
+    httpParams = httpParams.append('print', 'preety');
+    httpParams = httpParams.append('custom', 'ket');
     return this.http.get('https://ng-complete-guide-80c93.firebaseio.com/posts.json',
     {
-      headers : new HttpHeaders({'My-Header': 'Hello'})
+      headers : new HttpHeaders({'My-Header': 'Hello'}),
+      params : httpParams,
+      responseType : 'json'
     }).pipe(
       map((responseData : {[key: string]: Post}) => {
         const postArray :Post[] = [];
